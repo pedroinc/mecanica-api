@@ -1,17 +1,16 @@
 const { Model, DataTypes } = require("sequelize");
 
-class ServiceItem extends Model {
+class VModel extends Model {
   static init(sequelize) {
     super.init(
       {
         id: {
           type: DataTypes.UUIDV4,
+          defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
         },
         name: DataTypes.STRING,
-        description: DataTypes.STRING,
-        priceOriginal: DataTypes.DECIMAL,
-        priceOthers: DataTypes.DECIMAL,
+        vbrand_id: DataTypes.UUIDV4,
       },
       {
         sequelize,
@@ -20,8 +19,8 @@ class ServiceItem extends Model {
   }
 
   static associate(models) {
-    this.hasOne(models.Service, { foreignKey: "service_id", as: "service" });
+    this.belongsTo(models.Vehicle, { foreignKey: "vmodel_id", as: "vmodel" });
   }
 }
 
-module.exports = ServiceItem;
+module.exports = VModel;

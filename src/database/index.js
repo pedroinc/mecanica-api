@@ -1,14 +1,42 @@
 const Sequelize = require('sequelize');
-const dbConfig = require('../config/database');
+const dbConfig = require('../config/database.js');
 
-const Vehicle = require('../models/Vehicle');
-const Customer = require('../models/Customer');
-const Service = require('../models/Service');
+const sequelize = new Sequelize(dbConfig);
 
-const connection = new Sequelize(dbConfig);
+const VBrand = require('../models/VBrand.js');
+const VModel = require('../models/VModel.js');
+const Vehicle = require('../models/Vehicle.js');
+const Customer  = require('../models/Customer.js');
+const Service = require('../models/Service.js');
+// const ServiceItem from '../repositories/ServiceItem');
 
-Vehicle.init(connection);
-Customer.init(connection);
-Service.init(connection);
+// const sequelize = new Sequelize({
+//     dialect: 'sqlite',
+//     storage: './database/mecanica.sqlite',
+//     define: {
+//         timestamps: true,
+//         underscored: true
+//       }
+//   });
 
-module.exports = connection;
+// VBrand.hasMany(VModel);
+// VModel.belongsTo(VBrand);
+
+// Vehicle.hasOne(VModel);
+
+// Customer.hasMany(Vehicle);
+// Vehicle.belongsTo(Customer);
+
+// Service.hasOne(Customer);
+// Service.hasOne(Vehicle);
+
+// Vehicle.hasMany(Service);
+// Customer.hasMany(Service);
+
+VBrand.init(sequelize);
+VModel.init(sequelize);
+Vehicle.init(sequelize);
+Customer.init(sequelize);
+Service.init(sequelize);
+
+module.exports = sequelize;

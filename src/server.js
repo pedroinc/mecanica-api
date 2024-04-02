@@ -6,4 +6,9 @@ const app = express();
 app.use(express.json());
 app.use(routes)
 
-app.listen(3333);
+const port = 3333;
+// console.log(app);
+
+app.listen(port, 'localhost', () => {
+    console.log(`listening on port ${port}`);
+});

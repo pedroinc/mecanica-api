@@ -1,5 +1,5 @@
 const express = require('express');
-const sequelize = require('./database/index');
+const sequelize = require('../database/index');
 const routes = express.Router();
 
 const services = [
@@ -21,7 +21,8 @@ const services = [
   },
 ];
 
-routes.use('/login', require('./routes/login.routes'));
+routes.use('/login', require('./login.routes'));
+routes.use('/clientes', require('./customer.routes'));
 
 routes.get('/db/init', async (req, res) => {
   try {

@@ -1,10 +1,12 @@
 const express = require('express');
-const routes = require('./routes');
+const sequelize = require('./database/index');
 
 const app = express();
 
 app.use(express.json());
-app.use(routes);
+
+// routes
+app.use('/clientes', require('./routes/customer.routes'));
 
 const port = 3333;
 // console.log(app);

@@ -1,64 +1,43 @@
-// const express = require('express');
-// const sequelize = require('./database/index');
+const express = require('express');
+const Customer = require('../models/Customer');
+const CustomerRepository = require('../repositories/CustomerRepository');
 
-// const routes = express.Router();
+const customerRepository = new CustomerRepository();
+const customerRouter = express.Router();
 
-// app.use("/areas", require("./entities/area/area.routes"));
+customerRouter.get('/', async (req, res) => {
+  try {
+    const customers = await customerRepository.listAll();
+    return res.send(customers);
+  } catch (error) {
+    console.error('error creating a customer: ', error);
+    return res.status(500).send({ error });
+  }
+});
 
-// // const services = [
-// //   {
-// //     id: 123,
-// //     vehicle: {
-// //       countryID: '',
-// //       name: ''
-// //     },
-// //     owner: {
-// //       name: '',
-// //       phone: '',
-// //       cellphone: '',
-// //       email: ''
-// //     },
-// //     creationDate: Date.now(),
-// //     creationDate: Date.now(),
-// //     doneDate: Date.now(),
-// //   }
-// // ];
+customerRouter.post('/', async (req, res) => {
+  try {
+    const { name, email, phone } = req.body;
 
-// routes.get('/', async (req, res) => {
+    const customer = await customerRepository.create({ name, email, phone });
+
+    return res.json({ message: 'customer created!', customer });
+  } catch (error) {
+    // console.error('error creating a customer: ', error);
+    return res.status(500).send({ error });
+  }
+});
+
+// customerRouter.put('/', async (req, res) => {
 //   try {
-
-//   } catch (error) {
-
-//   }
-//   return res.json({})
+//   } catch (error) {}
+//   return res.json({});
 // });
 
-// routes.get('/', async (req, res) => {
-//     try {
-  
-//     } catch (error) {
-  
-//     }
-//     return res.json({})
-//   });
+// customerRouter.delete('/', async (req, res) => {
+//   try {
+//   } catch (error) {}
+//   return res.json({});
+// });
 
-//   routes.get('/', async (req, res) => {
-//     try {
-  
-//     } catch (error) {
-  
-//     }
-//     return res.json({})
-//   });
-
-//   routes.get('/', async (req, res) => {
-//     try {
-  
-//     } catch (error) {
-  
-//     }
-//     return res.json({})
-//   });
-
-
-// module.exports = routes;
+module.exports = customerRouter;

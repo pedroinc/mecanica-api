@@ -2,10 +2,10 @@ const dbConfig = {
   dialect: 'sqlite',
   storage: './mecanica.sqlite',
   define: {
-      timestamps: true,
-      underscored: true
-    }
-}
+    timestamps: true,
+    underscored: true,
+  },
+};
 
 module.exports = dbConfig;
 

@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require("sequelize");
+const { Model, DataTypes } = require('sequelize');
 
 class VModel extends Model {
   static init(sequelize) {
@@ -14,12 +14,12 @@ class VModel extends Model {
       },
       {
         sequelize,
-      }
+      },
     );
   }
 
   static associate(models) {
-    this.belongsTo(models.Vehicle, { foreignKey: "vmodel_id", as: "vmodel" });
+    this.belongsTo(models.Vehicle, { foreignKey: 'vmodel_id', as: 'vmodel' });
   }
 }
 

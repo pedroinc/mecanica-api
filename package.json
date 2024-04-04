@@ -16,6 +16,7 @@
     "sequelize-cli": "^6.2.0"
   },
   "dependencies": {
+    "editorconfig": "^2.0.0",
     "pg": "^8.3.3",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.37.2",

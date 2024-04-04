@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require("sequelize");
+const { Model, DataTypes } = require('sequelize');
 
 class ServiceItem extends Model {
   static init(sequelize) {
@@ -15,12 +15,12 @@ class ServiceItem extends Model {
       },
       {
         sequelize,
-      }
+      },
     );
   }
 
   static associate(models) {
-    this.hasOne(models.Service, { foreignKey: "service_id", as: "service" });
+    this.hasOne(models.Service, { foreignKey: 'service_id', as: 'service' });
   }
 }
 

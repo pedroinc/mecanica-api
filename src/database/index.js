@@ -6,7 +6,7 @@ const sequelize = new Sequelize(dbConfig);
 const VBrand = require('../models/VBrand.js');
 const VModel = require('../models/VModel.js');
 const Vehicle = require('../models/Vehicle.js');
-const Customer  = require('../models/Customer.js');
+const Customer = require('../models/Customer.js');
 const Service = require('../models/Service.js');
 // const ServiceItem from '../repositories/ServiceItem');
 

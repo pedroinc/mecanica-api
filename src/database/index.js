@@ -3,21 +3,12 @@ const dbConfig = require('../config/database.js');
 
 const sequelize = new Sequelize(dbConfig);
 
+const Customer = require('../models/Customer.js');
 const VBrand = require('../models/VBrand.js');
 const VModel = require('../models/VModel.js');
 const Vehicle = require('../models/Vehicle.js');
-const Customer = require('../models/Customer.js');
 const Service = require('../models/Service.js');
-// const ServiceItem from '../repositories/ServiceItem');
-
-// const sequelize = new Sequelize({
-//     dialect: 'sqlite',
-//     storage: './database/mecanica.sqlite',
-//     define: {
-//         timestamps: true,
-//         underscored: true
-//       }
-//   });
+const User = require('../models/User.js');
 
 // VBrand.hasMany(VModel);
 // VModel.belongsTo(VBrand);
@@ -33,10 +24,11 @@ const Service = require('../models/Service.js');
 // Vehicle.hasMany(Service);
 // Customer.hasMany(Service);
 
+Customer.init(sequelize);
 VBrand.init(sequelize);
 VModel.init(sequelize);
 Vehicle.init(sequelize);
-Customer.init(sequelize);
 Service.init(sequelize);
+User.init(sequelize);
 
 module.exports = sequelize;

@@ -1,4 +1,4 @@
-const VehicleRepository = require("../repositories/VehicleRepository");
+const VehicleRepository = require('../repositories/VehicleRepository');
 
 const vehicleRepository = new VehicleRepository();
 

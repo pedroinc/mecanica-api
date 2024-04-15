@@ -1,7 +1,6 @@
-const Customer = require("../models/Customer");
+const Customer = require('../models/Customer');
 
 class CustomerRepository {
-
   async findByEmail(email) {
     return await Customer.findOne({
       where: {
@@ -11,7 +10,7 @@ class CustomerRepository {
   }
 
   async listAll() {
-    return await Customer.findAll({ limit: 10, order: [ ['name', 'asc'] ] });
+    return await Customer.findAll({ limit: 10, order: [['name', 'asc']] });
   }
 
   async create(customer) {

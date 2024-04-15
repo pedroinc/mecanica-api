@@ -2,7 +2,6 @@ const express = require('express');
 const CustomerRepository = require('../repositories/CustomerRepository');
 const CreateCustomerService = require('../services/CreateCustomerService');
 
-
 const customerRouter = express.Router();
 const customerRepository = new CustomerRepository();
 const createCustomerService = new CreateCustomerService();
@@ -20,7 +19,11 @@ customerRouter.get('/', async (req, res) => {
 customerRouter.post('/', async (req, res) => {
   try {
     const { name, email, phone } = req.body;
-    const customer = await createCustomerService.execute({ name, email, phone });
+    const customer = await createCustomerService.execute({
+      name,
+      email,
+      phone,
+    });
     return res.json(customer);
   } catch (error) {
     console.error(error);

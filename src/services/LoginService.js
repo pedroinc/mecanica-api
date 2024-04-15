@@ -21,12 +21,9 @@ class LoginService {
 
     if (!isCorrectPassword) throw Error('Email or password invalid!');
 
-    const token = jwt.sign(
-      { _id: user.id }, jwt_secret,
-      {
-        expiresIn: '24h',
-      }
-    );
+    const token = jwt.sign({ _id: user.id }, jwt_secret, {
+      expiresIn: '24h',
+    });
     return { token };
   }
 }

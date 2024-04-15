@@ -37,8 +37,7 @@ app.get('/db/init', async (req, res) => {
 });
 
 app.get('/ingest', async (req, res) => {
-
-  console.log('/ingest')
+  console.log('/ingest');
   // ingest vbrands
   try {
     const vbrand = await VBrand.create({ name: 'Fiat' });

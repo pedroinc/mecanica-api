@@ -21,8 +21,8 @@ class CreateUserService {
     const salt = genSaltSync();
     const hashedPassword = hashSync(password, salt);
 
-    // email is a valid email
-    // password is valid
+    // TODO validate email
+    // TODO validate password
 
     await userRepository.create({
       name,

@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 
-class VModel extends Model {
+class Repair extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -9,13 +9,11 @@ class VModel extends Model {
           defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
         },
-        name: {
-          type: DataTypes.STRING,
-          allowNull: false,
-          unique: true,
-        },
-        allowNull: false,
-        vbrandId: DataTypes.UUIDV4,
+        description: DataTypes.TEXT('long'),
+        discount: DataTypes.DECIMAL,
+        total: DataTypes.DECIMAL,
+        vehicleId: DataTypes.UUIDV4,
+        customerId: DataTypes.UUIDV4,
       },
       {
         sequelize,
@@ -24,4 +22,4 @@ class VModel extends Model {
   }
 }
 
-module.exports = VModel;
+module.exports = Repair;

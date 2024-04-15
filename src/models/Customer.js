@@ -16,7 +16,6 @@ class Customer extends Model {
           type: DataTypes.STRING,
           allowNull: false,
           unique: true,
-          validate: {},
         },
         dateOfBirth: DataTypes.DATE,
       },
@@ -24,10 +23,6 @@ class Customer extends Model {
         sequelize,
       },
     );
-  }
-
-  static associate(models) {
-    this.hasMany(models.Vehicle, { foreignKey: 'customer_id', as: 'vehicles' });
   }
 }
 

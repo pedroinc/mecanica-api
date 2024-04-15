@@ -12,11 +12,10 @@ class LoginService {
 
     if (!password) throw Error('The password cannot be empty!');
 
+    // TODO validate email and password
+
     const user = await userRepository.findByEmail(email);
     if (!user) throw Error('Error while logging user!');
-
-    // console.log(user);
-    // console.log(user.password);
 
     const isCorrectPassword = compareSync(password, user.password);
 
@@ -25,13 +24,10 @@ class LoginService {
     const token = jwt.sign(
       { _id: user.id }, jwt_secret,
       {
-        expiresIn: '1h',
-        // expiresIn: '60s',
+        expiresIn: '24h',
       }
     );
     return { token };
-    // email is a valid email
-    // password is valid
   }
 }
 

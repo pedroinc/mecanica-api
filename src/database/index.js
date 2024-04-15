@@ -1,34 +1,32 @@
 const Sequelize = require('sequelize');
 const dbConfig = require('../config/database.js');
 
-const sequelize = new Sequelize(dbConfig);
+const connection = new Sequelize(dbConfig);
 
 const Customer = require('../models/Customer.js');
 const VBrand = require('../models/VBrand.js');
 const VModel = require('../models/VModel.js');
 const Vehicle = require('../models/Vehicle.js');
-const Service = require('../models/Service.js');
+const Repair = require('../models/Repair.js');
 const User = require('../models/User.js');
 
-// VBrand.hasMany(VModel);
-// VModel.belongsTo(VBrand);
+Customer.init(connection);
+VBrand.init(connection);
+VModel.init(connection);
+Vehicle.init(connection);
+Repair.init(connection);
+User.init(connection);
 
-// Vehicle.hasOne(VModel);
+VBrand.hasMany(VModel);
+VModel.belongsTo(VBrand);
 
-// Customer.hasMany(Vehicle);
-// Vehicle.belongsTo(Customer);
+Vehicle.belongsTo(Customer);
+Customer.hasMany(Vehicle);
 
-// Service.hasOne(Customer);
-// Service.hasOne(Vehicle);
+Repair.belongsTo(Vehicle);
+Repair.belongsTo(Customer);
 
-// Vehicle.hasMany(Service);
-// Customer.hasMany(Service);
+Vehicle.hasMany(Repair);
+Customer.hasMany(Repair);
 
-Customer.init(sequelize);
-VBrand.init(sequelize);
-VModel.init(sequelize);
-Vehicle.init(sequelize);
-Service.init(sequelize);
-User.init(sequelize);
-
-module.exports = sequelize;
+module.exports = connection;

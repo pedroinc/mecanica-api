@@ -9,25 +9,26 @@ class Vehicle extends Model {
           defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
         },
-        licensePlate: DataTypes.STRING,
+        plate: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          unique: true,
+        },
         name: DataTypes.STRING,
-        vin: DataTypes.STRING,
-        year: DataTypes.STRING,
-        vmodel_id: DataTypes.UUIDV4,
-        customer_id: DataTypes.UUIDV4,
+        vin: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          unique: true,
+        },
+        modelYear: DataTypes.INTEGER,
+        factoryYear: DataTypes.INTEGER,
+        vmodelId: DataTypes.UUIDV4,
+        customerId: DataTypes.UUIDV4,
       },
       {
         sequelize,
       },
     );
-  }
-
-  static associate(models) {
-    this.belongsTo(models.Customer, {
-      foreignKey: 'customer_id',
-      as: 'customer',
-    });
-    this.hasOne(models.VModel, { foreignKey: 'vmodel_id', as: 'model' });
   }
 }
 

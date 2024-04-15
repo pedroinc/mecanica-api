@@ -1,17 +1,23 @@
-const Vehicle = require("../models/Vehicle");
+const Customer = require('../models/Customer');
+const Vehicle = require('../models/Vehicle');
 
 class VehicleRepository {
-
   async findByPlate(plate) {
     return await Vehicle.findOne({
       where: {
-        licensePlate: plate,
+        plate,
       },
     });
   }
 
   async listAll() {
-    return await Vehicle.findAll({ limit: 10, order: [ ['name', 'asc'] ] });
+    return await Vehicle.findAll(
+      {
+        include: Customer,
+        limit: 10,
+        // order: [['name', 'asc']]
+      }
+    );
   }
 
   async create(vehicle) {

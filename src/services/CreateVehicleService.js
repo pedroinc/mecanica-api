@@ -1,3 +1,4 @@
+const { MessageUtils } = require('../config/messages');
 const VehicleRepository = require('../repositories/VehicleRepository');
 
 const vehicleRepository = new VehicleRepository();
@@ -9,12 +10,12 @@ class CreateVehicleService {
     vin,
     modelYear,
     factoryYear,
-    vmodelId,
+    vehicleModelId,
     customerId,
   }) {
     const vehicle = await vehicleRepository.findByPlate(plate);
     if (vehicle) {
-      throw Error('This plate is already registered!');
+      throw Error(MessageUtils.vehicles.error.PLATE_ALREADY_REGISTERED);
     }
     return await vehicleRepository.create({
       plate,
@@ -22,7 +23,7 @@ class CreateVehicleService {
       vin,
       modelYear,
       factoryYear,
-      vmodelId,
+      vehicleModelId,
       customerId,
     });
   }

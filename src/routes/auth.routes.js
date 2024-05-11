@@ -7,9 +7,9 @@ const LoginService = require('../services/LoginService');
 const createUserService = new CreateUserService();
 const loginService = new LoginService();
 
-const userRouter = express.Router();
+const authRouter = express.Router();
 
-userRouter.post('/signup', async (req, res) => {
+authRouter.post('/signup', async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
 
   try {
@@ -22,7 +22,7 @@ userRouter.post('/signup', async (req, res) => {
   }
 });
 
-userRouter.post('/login', async (req, res) => {
+authRouter.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -35,11 +35,11 @@ userRouter.post('/login', async (req, res) => {
   }
 });
 
-userRouter.patch('/resetpassword', (req, res) => {
+authRouter.patch('/resetpassword', (req, res) => {
   // send link with email
   const { email, password } = req.body;
   // check if email exists
   // if yes, send email with link to reset the password
 });
 
-module.exports = userRouter;
+module.exports = authRouter;

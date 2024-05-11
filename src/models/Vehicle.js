@@ -5,25 +5,34 @@ class Vehicle extends Model {
     super.init(
       {
         id: {
-          type: DataTypes.UUIDV4,
+          type: DataTypes.UUID,
           defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
         },
         plate: {
           type: DataTypes.STRING,
           allowNull: false,
-          unique: true,
         },
-        name: DataTypes.STRING,
+        name: {
+          type: DataTypes.STRING,
+        },
         vin: {
           type: DataTypes.STRING,
-          allowNull: false,
-          unique: true,
         },
-        modelYear: DataTypes.INTEGER,
-        factoryYear: DataTypes.INTEGER,
-        vmodelId: DataTypes.UUIDV4,
-        customerId: DataTypes.UUIDV4,
+        modelYear: {
+          type: DataTypes.INTEGER,
+          validate: {
+            isInt: true,
+          }
+        },
+        factoryYear: {
+          type: DataTypes.INTEGER,
+          validate: {
+            isInt: true,
+          }
+        },
+        vehicleModelId: DataTypes.UUID,
+        customerId: DataTypes.UUID,
       },
       {
         sequelize,

@@ -5,17 +5,26 @@ class Customer extends Model {
     super.init(
       {
         id: {
-          type: DataTypes.UUIDV4,
+          type: DataTypes.UUID,
           defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
         },
-        name: DataTypes.STRING,
-        phone: DataTypes.STRING,
-        cellphone: DataTypes.STRING,
+        name: {
+          type: DataTypes.STRING,
+        },
+        phone: {
+          type: DataTypes.STRING,
+        },
+        cellphone: {
+          type: DataTypes.STRING,
+        },
         email: {
           type: DataTypes.STRING,
-          allowNull: false,
+          allowNull: true,
           unique: true,
+          validate: {
+            isEmail: true,
+          },
         },
         dateOfBirth: DataTypes.DATE,
       },

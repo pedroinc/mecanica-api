@@ -1,11 +1,13 @@
 require('dotenv').config();
 
 const express = require('express');
+const cors = require('cors')
 const connection = require('./database/index');
 const app = express();
 const isTokenValid = require('./middlewares/isTokenValid');
-const VBrand = require('./models/VBrand');
-const VModel = require('./models/VModel');
+const VehicleBrand = require('./models/VehicleBrand');
+const VehicleModel = require('./models/VehicleModel');
+const Customer = require('./models/Customer');
 
 const config = {
   hostname: '0.0.0.0',
@@ -13,6 +15,7 @@ const config = {
 };
 
 app.use(express.json());
+app.use(cors())
 
 app.get('/', async (req, res) => {
   try {
@@ -38,22 +41,33 @@ app.get('/db/init', async (req, res) => {
 
 app.get('/ingest', async (req, res) => {
   console.log('/ingest');
-  // ingest vbrands
-  try {
-    const vbrand = await VBrand.create({ name: 'Fiat' });
 
-    const vmodel = await VModel.bulkCreate([
-      { name: 'Palio', vbrand_id: vbrand.id },
-      { name: 'Siena', vbrand_id: vbrand.id },
-      { name: 'Uno', vbrand_id: vbrand.id },
-      { name: 'Stilo', vbrand_id: vbrand.id },
-      { name: 'Mobi', vbrand_id: vbrand.id },
+  try {
+    const fiat = await VehicleBrand.create({ name: 'Fiat' });
+
+    const fiatModels = await VehicleModel.bulkCreate([
+      { name: 'Palio', vehicleBrandId: fiat.id },
+      { name: 'Siena', vehicleBrandId: fiat.id },
+      { name: 'Uno', vehicleBrandId: fiat.id },
+      { name: 'Stilo', vehicleBrandId: fiat.id },
+      { name: 'Mobi', vehicleBrandId: fiat.id },
+    ]);
+
+    const ford = await VehicleBrand.create({ name: 'Ford' });
+
+    const fordModels = await VehicleModel.bulkCreate([
+      { name: 'EcoSport', vehicleBrandId: ford.id },
+      { name: 'Fusion', vehicleBrandId: ford.id },
+      { name: 'Focus', vehicleBrandId: ford.id },
+      { name: 'Fiesta', vehicleBrandId: ford.id },
+      { name: 'Ford Ka Hatch', vehicleBrandId: ford.id },
+      { name: 'Ford Ka Sedan', vehicleBrandId: ford.id },
     ]);
 
     return res.json({
       ingested: {
-        vbrand,
-        vmodel,
+        [fiat.name]: fiatModels,
+        [ford.name]: fordModels,
       },
     });
   } catch (error) {
@@ -67,7 +81,8 @@ app.use('/customers', isTokenValid, require('./routes/customer.routes'));
 app.use('/vehicles', isTokenValid, require('./routes/vehicle.routes'));
 app.use('/repairs', isTokenValid, require('./routes/repair.routes'));
 
-app.use('/users', require('./routes/user.routes'));
+app.use('/auth', require('./routes/auth.routes'));
+// app.use('/users', require('./routes/user.routes'));
 
 app.listen(config.port, config.hostname, () => {
   console.log(`server running on port ${config.port}`);

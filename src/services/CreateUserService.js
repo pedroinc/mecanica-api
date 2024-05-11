@@ -1,21 +1,22 @@
 const { hashSync, genSaltSync } = require('bcryptjs');
 
 const UserRepository = require('../repositories/UserRepository');
+const { auth } = require('../config/messages');
 
 const userRepository = new UserRepository();
 
 class CreateUserService {
   async execute({ name, email, password, confirmPassword }) {
-    if (!email) throw Error('The email cannot be empty!');
+    if (!email) throw Error(auth.error.EMAIL_EMPTY);
 
-    if (!password) throw Error('The password cannot be empty!');
+    if (!password) throw Error(auth.error.PASSWORD_EMPTY);
 
     if (password !== confirmPassword)
-      throw Error('The passwords should be equal!');
+      throw Error(auth.error.PASSWORDS_SHOULD_MATCH);
 
     const userWithTheSameEmail = await userRepository.findByEmail(email);
     if (userWithTheSameEmail) {
-      throw Error('This email is already registered!');
+      throw Error(auth.error.EMAIL_ALREADY_REGISTERED);
     }
 
     const salt = genSaltSync();

@@ -1,11 +1,11 @@
 const { Model, DataTypes } = require('sequelize');
 
-class VModel extends Model {
+class VehicleModel extends Model {
   static init(sequelize) {
     super.init(
       {
         id: {
-          type: DataTypes.UUIDV4,
+          type: DataTypes.UUID,
           defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
         },
@@ -14,8 +14,7 @@ class VModel extends Model {
           allowNull: false,
           unique: true,
         },
-        allowNull: false,
-        vbrandId: DataTypes.UUIDV4,
+        vehicleBrandId: DataTypes.UUID,
       },
       {
         sequelize,
@@ -24,4 +23,4 @@ class VModel extends Model {
   }
 }
 
-module.exports = VModel;
+module.exports = VehicleModel;

@@ -1,11 +1,11 @@
 const { Model, DataTypes } = require('sequelize');
 
-class VBrand extends Model {
+class VehicleBrand extends Model {
   static init(sequelize) {
     super.init(
       {
         id: {
-          type: DataTypes.UUIDV4,
+          type: DataTypes.UUID,
           defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
         },
@@ -22,4 +22,4 @@ class VBrand extends Model {
   }
 }
 
-module.exports = VBrand;
+module.exports = VehicleBrand;

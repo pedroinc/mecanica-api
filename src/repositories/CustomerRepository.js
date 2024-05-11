@@ -9,6 +9,14 @@ class CustomerRepository {
     });
   }
 
+  async findById(id) {
+    return await Customer.findOne({
+      where: {
+        id,
+      },
+    });
+  }
+
   async listAll() {
     return await Customer.findAll({ limit: 10, order: [['name', 'asc']] });
   }

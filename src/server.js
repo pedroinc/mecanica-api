@@ -5,9 +5,6 @@ const cors = require('cors')
 const connection = require('./database/index');
 const app = express();
 const isTokenValid = require('./middlewares/isTokenValid');
-const VehicleBrand = require('./models/VehicleBrand');
-const VehicleModel = require('./models/VehicleModel');
-const Customer = require('./models/Customer');
 
 const config = {
   hostname: '0.0.0.0',
@@ -36,43 +33,6 @@ app.get('/db/init', async (req, res) => {
     const prefix = 'Unable to connect to the database!';
     console.error(prefix, error);
     return res.json({ error: prefix });
-  }
-});
-
-app.get('/ingest', async (req, res) => {
-  console.log('/ingest');
-
-  try {
-    const fiat = await VehicleBrand.create({ name: 'Fiat' });
-
-    const fiatModels = await VehicleModel.bulkCreate([
-      { name: 'Palio', vehicleBrandId: fiat.id },
-      { name: 'Siena', vehicleBrandId: fiat.id },
-      { name: 'Uno', vehicleBrandId: fiat.id },
-      { name: 'Stilo', vehicleBrandId: fiat.id },
-      { name: 'Mobi', vehicleBrandId: fiat.id },
-    ]);
-
-    const ford = await VehicleBrand.create({ name: 'Ford' });
-
-    const fordModels = await VehicleModel.bulkCreate([
-      { name: 'EcoSport', vehicleBrandId: ford.id },
-      { name: 'Fusion', vehicleBrandId: ford.id },
-      { name: 'Focus', vehicleBrandId: ford.id },
-      { name: 'Fiesta', vehicleBrandId: ford.id },
-      { name: 'Ford Ka Hatch', vehicleBrandId: ford.id },
-      { name: 'Ford Ka Sedan', vehicleBrandId: ford.id },
-    ]);
-
-    return res.json({
-      ingested: {
-        [fiat.name]: fiatModels,
-        [ford.name]: fordModels,
-      },
-    });
-  } catch (error) {
-    console.error(error);
-    return res.json({ error });
   }
 });
 

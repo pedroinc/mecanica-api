@@ -21,15 +21,15 @@ class Vehicle extends Model {
         },
         modelYear: {
           type: DataTypes.INTEGER,
-          validate: {
-            isInt: true,
-          }
+          // validate: {
+          //   isInt: true,
+          // }
         },
         factoryYear: {
           type: DataTypes.INTEGER,
-          validate: {
-            isInt: true,
-          }
+          // validate: {
+          //   isInt: true,
+          // }
         },
         vehicleModelId: DataTypes.UUID,
         customerId: DataTypes.UUID,

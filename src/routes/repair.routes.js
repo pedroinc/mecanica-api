@@ -67,21 +67,23 @@ repairRouter.post('/:repairId/parts', async (req, res) => {
   try {
     const { repairId } = req.params;
     const {
+      id,
       name,
       description,
       numItems,
-      authenticPrice,
-      notAuthenticPrice,
+      priceAuthentic,
+      priceNotAuthentic,
       useAuthentic,
     } = req.body;
     const itemPart = await upsertRepairItemPartsService.execute({
-      repairId,
+      id,
       name,
       description,
       numItems,
-      authenticPrice,
-      notAuthenticPrice,
+      priceAuthentic,
+      priceNotAuthentic,
       useAuthentic,
+      repairId,
     });
     return res.json(itemPart);
   } catch (error) {

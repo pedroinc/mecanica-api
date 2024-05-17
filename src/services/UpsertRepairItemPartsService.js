@@ -15,7 +15,6 @@ const repairRepository = new RepairRepository();
 
 class UpsertRepairItemPartsService {
   async execute(itemPart) {
-    console.log('upsert: ', itemPart);
     return await repairRepository.upsertItemPart(itemPart);
     // const unresolvedUpserts = [];
 

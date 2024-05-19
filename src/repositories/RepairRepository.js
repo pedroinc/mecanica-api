@@ -36,20 +36,35 @@ class RepairRepository {
   async upsertItemPart(itemPart) {
     if (itemPart.id) {
       const existingItem = await RepairItemPart.findByPk(itemPart.id);
-      if(!existingItem) throw Error('Error while updating item part');
 
-      console.log('update', itemPart);
+      if (!existingItem) {
+        throw Error('ERROR_UPDATING_REPAIR_ITEM_PART');
+      }
 
+      console.log('update itemPart', itemPart);
       existingItem.set(itemPart);
       return await existingItem.save();
     }
-    console.log('create', itemPart);
+    console.log('create itemPart', itemPart);
     return await RepairItemPart.create(itemPart);
   }
 
   async upsertItemTask(itemTask) {
-    return await RepairItemTask.upsert(itemTask);
-    // return await RepairItemTask.create(itemTask);
+    console.log('RepairRepo upsertItemTask', itemTask);
+
+    if (itemTask.id) {
+      const existingItem = await RepairItemTask.findByPk(itemTask.id);
+
+      if (!existingItem) {
+        throw Error('ERROR_UPDATING_REPAIR_ITEM_TASK');
+      }
+
+      console.log('update itemTask', itemTask);
+      existingItem.set(itemTask);
+      return await existingItem.save();
+    }
+    console.log('create itemTask', itemTask);
+    return await RepairItemTask.create(itemTask);
   }
 }
 

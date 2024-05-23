@@ -18,6 +18,23 @@ const upsertRepairItemTasksService = new UpsertRepairItemTasksService();
 repairRouter.get('/', async (req, res) => {
   try {
     const repairs = await Repair.findAll({
+      include: [Vehicle, Customer],
+    });
+    return res.send(repairs);
+  } catch (error) {
+    console.error('error creating a vehicle repair: ', error);
+    return res.status(500).send({ error });
+  }
+});
+
+repairRouter.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const repairs = await Repair.findOne({
+      where: {
+        id,
+      },
       include: [Vehicle, Customer, RepairItemTask, RepairItemPart],
     });
     return res.send(repairs);

@@ -35,6 +35,7 @@ const vehicles = {
 }
 
 module.exports = {
+  MessageUtils,
   auth,
   vehicles,
 };

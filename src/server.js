@@ -2,12 +2,12 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors')
-const connection = require('./database/index');
+require('./database/index');
 const app = express();
 const isTokenValid = require('./middlewares/isTokenValid');
 
 const config = {
-  hostname: '0.0.0.0',
+  hostname: process.env.HOST,
   port: process.env.PORT,
 };
 
@@ -21,20 +21,6 @@ app.get('/', async (req, res) => {
     return res.json({ error });
   }
 });
-
-// app.get('/db/init', async (req, res) => {
-//   try {
-//     await connection.authenticate();
-//     console.log('Connection has been established successfully.');
-//     await connection.sync({ force: true });
-//     console.log('All models were synchronized successfully.');
-//     return res.json({ message: 'All models were synchronized successfully.' });
-//   } catch (error) {
-//     const prefix = 'Unable to connect to the database!';
-//     console.error(prefix, error);
-//     return res.json({ error: prefix });
-//   }
-// });
 
 // routes
 app.use('/customers', isTokenValid, require('./routes/customer.routes'));

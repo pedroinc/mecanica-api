@@ -9,7 +9,7 @@ const HTTP_STATUS_CODE = {
 const invalidTokenMessage = 'Access denied.';
 
 const isTokenValid = (req, res, next) => {
-  const [, token] = req.headers.authorization?.split(' ') || ['', ''];
+  const { token } = req.cookies;
 
   if (!token)
     return res

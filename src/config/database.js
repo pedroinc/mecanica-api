@@ -15,8 +15,9 @@ const dbConfig = {
   database: process.env.DB_NAME,
   define: {
     timestamps: true,
-    underscored: true
-  }
-}
+    underscored: true,
+    // logging: true,
+  },
+};
 
 module.exports = dbConfig;

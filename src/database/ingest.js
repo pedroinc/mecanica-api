@@ -21,13 +21,11 @@ const mockedVehicle = {
 
 (async () => {
   try {
-
     await connection.authenticate();
     console.log('Connection has been established successfully.');
 
     await connection.sync({ force: true });
     console.log('All models were synchronized successfully.');
-
 
     // begin ingest
     const fiat = await VehicleBrand.create({ name: 'Fiat' });
@@ -51,17 +49,24 @@ const mockedVehicle = {
     ]);
 
     const createCustomerService = new CreateCustomerService();
+
+    const firstName = faker.person.firstName();
+    const lastName = faker.person.lastName();
+
     const newCustomer = await createCustomerService.execute({
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
+      name: `${firstName} ${lastName}`,
+      email: faker.internet.email({
+        firstName,
+        lastName,
+      }),
       phone: faker.phone.number(),
     });
 
     const wantedVehicleModel = await VehicleModel.findOne({
       where: {
         name: 'Palio',
-      }
-    })
+      },
+    });
     const createVehicleService = new CreateVehicleService();
     const newVehicle = await createVehicleService.execute({
       plate: mockedVehicle.plate,

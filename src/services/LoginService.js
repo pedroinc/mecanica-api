@@ -14,7 +14,7 @@ class LoginService {
 
     if (!password) throw Error(auth.error.PASSWORD_EMPTY);
 
-    const user = await userRepository.findByEmail(email);
+    const user = await userRepository.findByEmail(email, true);
     if (!user) throw Error(auth.error.USER_BY_EMAIL_NOT_FOUND, user);
 
     const isCorrectPassword = compareSync(password, user.password);
@@ -25,7 +25,10 @@ class LoginService {
       expiresIn: jwtExpiresIn,
       // expiresIn: 0,
     });
-    return { token };
+
+    delete user.password;
+
+    return { user, token };
   }
 }
 

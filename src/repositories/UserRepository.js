@@ -5,11 +5,12 @@ class UserRepository {
   //   return await User.findAll({ limit: 10, order: [ ['name', 'asc'] ] });
   // }
 
-  async findByEmail(email) {
+  async findByEmail(email, raw = false) {
     return await User.findOne({
       where: {
         email,
       },
+      raw,
     });
   }
 

@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 
-class Customer extends Model {
+class RepairItemTask extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -11,22 +11,18 @@ class Customer extends Model {
         },
         name: {
           type: DataTypes.STRING,
+          allowNull: false,
         },
-        phone: {
-          type: DataTypes.STRING,
+        description: {
+          type: DataTypes.TEXT('long'),
         },
-        cellphone: {
-          type: DataTypes.STRING,
+        price: {
+          type: DataTypes.DECIMAL(10, 2),
         },
-        email: {
-          type: DataTypes.STRING,
-          allowNull: true,
-          unique: true,
-          validate: {
-            isEmail: true,
-          },
+        discount: {
+          type: DataTypes.DECIMAL(10, 2),
         },
-        dateOfBirth: DataTypes.DATE,
+        repairId: DataTypes.UUID,
       },
       {
         sequelize,
@@ -35,4 +31,4 @@ class Customer extends Model {
   }
 }
 
-module.exports = Customer;
+module.exports = RepairItemTask;

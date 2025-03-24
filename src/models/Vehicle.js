@@ -1,20 +1,43 @@
-
 const { Model, DataTypes } = require('sequelize');
 
 class Vehicle extends Model {
   static init(sequelize) {
-    super.init({
-      licensePlate: DataTypes.STRING,
-      name: DataTypes.STRING,
-      vin: DataTypes.STRING,
-      year: DataTypes.STRING,
-    }, {
-      sequelize
-    })
-  }
-
-  static associate(models) {
-    this.belongsTo(models.Customer, { foreignKey: 'customer_id', as: 'customer' })
+    super.init(
+      {
+        id: {
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
+          primaryKey: true,
+        },
+        plate: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        name: {
+          type: DataTypes.STRING,
+        },
+        vin: {
+          type: DataTypes.STRING,
+        },
+        modelYear: {
+          type: DataTypes.INTEGER,
+          // validate: {
+          //   isInt: true,
+          // }
+        },
+        factoryYear: {
+          type: DataTypes.INTEGER,
+          // validate: {
+          //   isInt: true,
+          // }
+        },
+        vehicleModelId: DataTypes.UUID,
+        customerId: DataTypes.UUID,
+      },
+      {
+        sequelize,
+      },
+    );
   }
 }
 

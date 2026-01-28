@@ -1,13 +1,14 @@
-// const dbConfig = {
-//   dialect: 'sqlite',
-//   storage: './mecanica.sqlite',
-//   define: {
-//     timestamps: true,
-//     underscored: true,
-//   },
-// };
+const sqliteConfig = {
+  dialect: 'sqlite',
+  storage: './mecanica.sqlite',
+  define: {
+    timestamps: true,
+    underscored: true,
+    logging: process.env.DB_LOGGING ?? true,
+  },
+};
 
-const dbConfig = {
+const anotherDbConfig = {
   dialect: process.env.DB_DIALECT,
   host: process.env.DB_HOST,
   username: process.env.DB_USER,
@@ -16,8 +17,12 @@ const dbConfig = {
   define: {
     timestamps: true,
     underscored: true,
-    // logging: true,
+    logging: process.env.DB_LOGGING ?? true,
   },
 };
 
-module.exports = dbConfig;
+const dbConfig = process.env.DB_DIALECT === 'sqlite' ? sqliteConfig : anotherDbConfig;
+
+module.exports = {
+  ...dbConfig
+};

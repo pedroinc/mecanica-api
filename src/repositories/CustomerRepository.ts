@@ -1,8 +1,11 @@
-import Customer from '../models/Customer';
+import { AppDataSource } from '../database/data-source';
+import Customer from '../entities/Customer';
 
 class CustomerRepository {
+  private repository = AppDataSource.getRepository(Customer);
+
   async findByEmail(email: string) {
-    return await Customer.findOne({
+    return await this.repository.findOne({
       where: {
         email,
       },
@@ -10,7 +13,7 @@ class CustomerRepository {
   }
 
   async findById(id: string) {
-    return await Customer.findOne({
+    return await this.repository.findOne({
       where: {
         id,
       },
@@ -18,7 +21,7 @@ class CustomerRepository {
   }
 
   async listAll() {
-    return await Customer.findAll({ limit: 10, order: [['name', 'asc']] });
+    return await this.repository.find({ take: 10, order: { name: 'ASC' } });
   }
 
   async create(customer: {
@@ -28,7 +31,8 @@ class CustomerRepository {
     cellphone?: string;
     dateOfBirth?: Date;
   }) {
-    return await Customer.create(customer);
+    const entity = this.repository.create(customer);
+    return await this.repository.save(entity);
   }
 }
 

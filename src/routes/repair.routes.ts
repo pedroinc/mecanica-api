@@ -1,24 +1,22 @@
 import express from 'express';
 
-import Repair from '../models/Repair';
-import Customer from '../models/Customer';
-import Vehicle from '../models/Vehicle';
-import RepairItemPart from '../models/RepairItemPart';
-import RepairItemTask from '../models/RepairItemTask';
+import { AppDataSource } from '../database/data-source';
+import Repair from '../entities/Repair';
 
 import CreateRepairService from '../services/CreateRepairService';
 import UpsertRepairItemPartsService from '../services/UpsertRepairItemPartsService';
 import UpsertRepairItemTasksService from '../services/UpsertRepairItemTasksService';
 
 const repairRouter = express.Router();
+const repairRepository = AppDataSource.getRepository(Repair);
 const createRepairService = new CreateRepairService();
 const upsertRepairItemPartsService = new UpsertRepairItemPartsService();
 const upsertRepairItemTasksService = new UpsertRepairItemTasksService();
 
 repairRouter.get('/', async (req, res) => {
   try {
-    const repairs = await Repair.findAll({
-      include: [Vehicle, Customer],
+    const repairs = await repairRepository.find({
+      relations: { vehicle: true, customer: true },
     });
     return res.send(repairs);
   } catch (error) {
@@ -31,11 +29,16 @@ repairRouter.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    const repairs = await Repair.findOne({
+    const repairs = await repairRepository.findOne({
       where: {
         id,
       },
-      include: [Vehicle, Customer, RepairItemTask, RepairItemPart],
+      relations: {
+        vehicle: true,
+        customer: true,
+        repairItemTasks: true,
+        repairItemParts: true,
+      },
     });
     return res.send(repairs);
   } catch (error) {

@@ -1,8 +1,7 @@
-import Customer from '../models/Customer';
-import Vehicle from '../models/Vehicle';
-import Repair from '../models/Repair';
-import RepairItemPart from '../models/RepairItemPart';
-import RepairItemTask from '../models/RepairItemTask';
+import { AppDataSource } from '../database/data-source';
+import Repair from '../entities/Repair';
+import RepairItemPart from '../entities/RepairItemPart';
+import RepairItemTask from '../entities/RepairItemTask';
 
 type ItemPart = {
   id?: string;
@@ -25,26 +24,30 @@ type ItemTask = {
 };
 
 class RepairRepository {
+  private repository = AppDataSource.getRepository(Repair);
+  private repairItemPartRepository = AppDataSource.getRepository(RepairItemPart);
+  private repairItemTaskRepository = AppDataSource.getRepository(RepairItemTask);
+
   async findByCustomer(customerId: string) {
-    return await Repair.findOne({
+    return await this.repository.findOne({
       where: {
-        customerId,
+        customer: { id: customerId },
       },
     });
   }
 
   async findByVehicle(vehicleId: string) {
-    return await Repair.findOne({
+    return await this.repository.findOne({
       where: {
-        vehicleId,
+        vehicle: { id: vehicleId },
       },
     });
   }
 
   async listAll() {
-    return await Repair.findAll({
-      include: [Customer, Vehicle],
-      limit: 10,
+    return await this.repository.find({
+      relations: { customer: true, vehicle: true },
+      take: 10,
     });
   }
 
@@ -55,41 +58,63 @@ class RepairRepository {
     vehicleId?: string;
     customerId?: string;
   }) {
-    return await Repair.create(repair);
+    const { vehicleId, customerId, ...rest } = repair;
+    const entity = this.repository.create({
+      ...rest,
+      vehicle: vehicleId ? { id: vehicleId } : null,
+      customer: customerId ? { id: customerId } : null,
+    });
+    return await this.repository.save(entity);
   }
 
   async upsertItemPart(itemPart: ItemPart) {
     if (itemPart.id) {
-      const existingItem = await RepairItemPart.findByPk(itemPart.id);
+      const existingItem = await this.repairItemPartRepository.findOne({
+        where: { id: itemPart.id },
+      });
 
       if (!existingItem) {
         throw Error('ERROR_UPDATING_REPAIR_ITEM_PART');
       }
 
       console.log('update itemPart', itemPart);
-      existingItem.set(itemPart);
-      return await existingItem.save();
+      const { repairId, ...rest } = itemPart;
+      this.repairItemPartRepository.merge(existingItem, rest);
+      return await this.repairItemPartRepository.save(existingItem);
     }
     console.log('create itemPart', itemPart);
-    return await RepairItemPart.create(itemPart);
+    const { repairId, ...rest } = itemPart;
+    const entity = this.repairItemPartRepository.create({
+      ...rest,
+      repair: repairId ? { id: repairId } : null,
+    });
+    return await this.repairItemPartRepository.save(entity);
   }
 
   async upsertItemTask(itemTask: ItemTask) {
     console.log('RepairRepo upsertItemTask', itemTask);
 
     if (itemTask.id) {
-      const existingItem = await RepairItemTask.findByPk(itemTask.id);
+      const existingItem = await this.repairItemTaskRepository.findOne({
+        where: { id: itemTask.id },
+      });
 
       if (!existingItem) {
         throw Error('ERROR_UPDATING_REPAIR_ITEM_TASK');
       }
 
       console.log('update itemTask', itemTask);
-      existingItem.set(itemTask);
-      return await existingItem.save();
+      const { repairId, ...rest } = itemTask;
+      this.repairItemTaskRepository.merge(existingItem, rest);
+      return await this.repairItemTaskRepository.save(existingItem);
     }
     console.log('create itemTask', itemTask);
-    return await RepairItemTask.create(itemTask);
+    const { repairId, ...rest } = itemTask;
+    const entity = this.repairItemTaskRepository.create({
+      ...rest,
+      repair: repairId ? { id: repairId } : null,
+    });
+    return await this.repairItemTaskRepository.save(entity);
   }
 }
 

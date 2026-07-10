@@ -1,17 +1,20 @@
-import User from '../models/User';
+import { AppDataSource } from '../database/data-source';
+import User from '../entities/User';
 
 class UserRepository {
-  async findByEmail(email: string, raw = false) {
-    return await User.findOne({
+  private repository = AppDataSource.getRepository(User);
+
+  async findByEmail(email: string) {
+    return await this.repository.findOne({
       where: {
         email,
       },
-      raw,
     });
   }
 
   async create(user: { name?: string; email: string; password: string }) {
-    return await User.create(user);
+    const entity = this.repository.create(user);
+    return await this.repository.save(entity);
   }
 }
 

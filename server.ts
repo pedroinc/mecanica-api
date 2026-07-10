@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import 'dotenv/config';
 
 import swaggerUi from 'swagger-ui-express';
@@ -5,8 +6,8 @@ import swaggerFile from './swagger_output.json';
 
 import express from 'express';
 import cors from 'cors';
-import './src/database/index';
 
+import { AppDataSource } from './src/database/data-source';
 import appRouter from './src/routes';
 import cookieParser from 'cookie-parser';
 
@@ -43,6 +44,14 @@ app.get('/', async (req, res) => {
 
 app.use(appRouter);
 
-app.listen(config.port, config.hostname, () => {
-  console.log(`server running on port ${config.port}`);
-});
+AppDataSource.initialize()
+  .then(() => {
+    console.log('Data Source has been initialized!');
+
+    app.listen(config.port, config.hostname, () => {
+      console.log(`server running on port ${config.port}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Error during Data Source initialization:', error);
+  });

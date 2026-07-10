@@ -1,9 +1,11 @@
-import Customer from '../models/Customer';
-import Vehicle from '../models/Vehicle';
+import { AppDataSource } from '../database/data-source';
+import Vehicle from '../entities/Vehicle';
 
 class VehicleRepository {
+  private repository = AppDataSource.getRepository(Vehicle);
+
   async findByPlate(plate: string) {
-    return await Vehicle.findOne({
+    return await this.repository.findOne({
       where: {
         plate,
       },
@@ -11,17 +13,17 @@ class VehicleRepository {
   }
 
   async findByCustomerId(customerId: string) {
-    return await Vehicle.findAll({
-      include: [Customer],
+    return await this.repository.find({
+      relations: { customer: true },
       where: {
-        customerId,
+        customer: { id: customerId },
       },
     });
   }
 
   async listAll() {
-    return await Vehicle.findAll({
-      limit: 10,
+    return await this.repository.find({
+      take: 10,
     });
   }
 
@@ -34,7 +36,13 @@ class VehicleRepository {
     vehicleModelId?: string;
     customerId?: string;
   }) {
-    return await Vehicle.create(vehicle);
+    const { vehicleModelId, customerId, ...rest } = vehicle;
+    const entity = this.repository.create({
+      ...rest,
+      vehicleModel: vehicleModelId ? { id: vehicleModelId } : null,
+      customer: customerId ? { id: customerId } : null,
+    });
+    return await this.repository.save(entity);
   }
 }
 

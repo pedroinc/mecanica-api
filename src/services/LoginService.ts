@@ -20,7 +20,7 @@ class LoginService {
 
     if (!password) throw Error(auth.error.PASSWORD_EMPTY);
 
-    const user = await userRepository.findByEmail(email, true);
+    const user = await userRepository.findByEmail(email);
     if (!user) throw Error(auth.error.USER_BY_EMAIL_NOT_FOUND);
 
     const isCorrectPassword = compareSync(password, user.password);

@@ -1,10 +1,10 @@
+import 'reflect-metadata';
 import 'dotenv/config';
 import { faker } from '@faker-js/faker';
 
-import connection from './index';
-
-import VehicleBrand from '../models/VehicleBrand';
-import VehicleModel from '../models/VehicleModel';
+import { AppDataSource } from './data-source';
+import VehicleBrand from '../entities/VehicleBrand';
+import VehicleModel from '../entities/VehicleModel';
 
 import CreateCustomerService from '../services/CreateCustomerService';
 import CreateVehicleService from '../services/CreateVehicleService';
@@ -20,32 +20,43 @@ const mockedVehicle = {
 
 (async () => {
   try {
-    await connection.authenticate();
+    await AppDataSource.initialize();
     console.log('Connection has been established successfully.');
 
-    await connection.sync({ force: true });
+    await AppDataSource.synchronize(true);
     console.log('All models were synchronized successfully.');
 
+    const vehicleBrandRepository = AppDataSource.getRepository(VehicleBrand);
+    const vehicleModelRepository = AppDataSource.getRepository(VehicleModel);
+
     // begin ingest
-    const fiat = await VehicleBrand.create({ name: 'Fiat' });
-    const fiatModels = await VehicleModel.bulkCreate([
-      { name: 'Palio', vehicleBrandId: fiat.id },
-      { name: 'Siena', vehicleBrandId: fiat.id },
-      { name: 'Uno', vehicleBrandId: fiat.id },
-      { name: 'Stilo', vehicleBrandId: fiat.id },
-      { name: 'Mobi', vehicleBrandId: fiat.id },
-    ]);
+    const fiat = await vehicleBrandRepository.save(
+      vehicleBrandRepository.create({ name: 'Fiat' }),
+    );
+    const fiatModels = await vehicleModelRepository.save(
+      vehicleModelRepository.create([
+        { name: 'Palio', vehicleBrand: { id: fiat.id } },
+        { name: 'Siena', vehicleBrand: { id: fiat.id } },
+        { name: 'Uno', vehicleBrand: { id: fiat.id } },
+        { name: 'Stilo', vehicleBrand: { id: fiat.id } },
+        { name: 'Mobi', vehicleBrand: { id: fiat.id } },
+      ]),
+    );
 
-    const ford = await VehicleBrand.create({ name: 'Ford' });
+    const ford = await vehicleBrandRepository.save(
+      vehicleBrandRepository.create({ name: 'Ford' }),
+    );
 
-    const fordModels = await VehicleModel.bulkCreate([
-      { name: 'EcoSport', vehicleBrandId: ford.id },
-      { name: 'Fusion', vehicleBrandId: ford.id },
-      { name: 'Focus', vehicleBrandId: ford.id },
-      { name: 'Fiesta', vehicleBrandId: ford.id },
-      { name: 'Ford Ka Hatch', vehicleBrandId: ford.id },
-      { name: 'Ford Ka Sedan', vehicleBrandId: ford.id },
-    ]);
+    const fordModels = await vehicleModelRepository.save(
+      vehicleModelRepository.create([
+        { name: 'EcoSport', vehicleBrand: { id: ford.id } },
+        { name: 'Fusion', vehicleBrand: { id: ford.id } },
+        { name: 'Focus', vehicleBrand: { id: ford.id } },
+        { name: 'Fiesta', vehicleBrand: { id: ford.id } },
+        { name: 'Ford Ka Hatch', vehicleBrand: { id: ford.id } },
+        { name: 'Ford Ka Sedan', vehicleBrand: { id: ford.id } },
+      ]),
+    );
 
     const createCustomerService = new CreateCustomerService();
 
@@ -61,7 +72,7 @@ const mockedVehicle = {
       phone: faker.phone.number(),
     });
 
-    const wantedVehicleModel = await VehicleModel.findOne({
+    const wantedVehicleModel = await vehicleModelRepository.findOne({
       where: {
         name: 'Palio',
       },
@@ -99,7 +110,9 @@ const mockedVehicle = {
 
     console.log('ingested mock data');
     console.log(insertedData);
+    process.exit(0);
   } catch (error) {
     console.error(error);
+    process.exit(1);
   }
 })();
